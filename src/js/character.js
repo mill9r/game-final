@@ -5,7 +5,6 @@ class Character {
     constructor(person, charX, charY, path) {
         this.index = 0;
         this.personSize = person.length;
-        // leftArm, legs, torso, rightArm, head, hair,
         this.person = person.map((value, index) => {
                 index++;
                 return loadImage(value,path);

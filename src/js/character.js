@@ -2,19 +2,23 @@ import {loadImage} from "./utils";
 
 class Character {
 
-    constructor(leftArm, legs, torso, rightArm, head, hair, charX, charY,path) {
-        this.leftArm = loadImage(leftArm,path);
-        this.legs = loadImage(legs,path);
-        this.torso = loadImage(torso,path);
-        this.rightArm = loadImage(rightArm,path);
-        this.head = loadImage(head,path);
-        this.hair = loadImage(hair,path);
+    constructor(person, charX, charY, path) {
+        this.index = 0;
+        this.personSize = person.length;
+        // leftArm, legs, torso, rightArm, head, hair,
+        this.person = person.map((value, index) => {
+                index++;
+                return loadImage(value,path);
+            }
+        );
         this.charX = charX;
         this.charY = charY;
     }
 
-    set(field,func,time) {
-        this[field].onload = setInterval(func,time);
+    set(field, func, time) {
+        if(this.index === this.personSize){
+            this[field].onload = setInterval(func, time);
+        }
     }
 }
 

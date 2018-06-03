@@ -1,11 +1,11 @@
-export const loadImage = name => {
+export const loadImage = (name,path) => {
     const img = new Image();
-    img.src = `./src/img/${name}.png`;
+    img.src = `./src/${path}/${name}.png`;
     return img;
 };
 
-export const redraw = (obj, canvasId,width, height) => {
-    const canvas = document.createElement('canvas');
+export const redraw = (obj, canvasId, width, height) => {
+    const canvas = document.createElement('canvasId');
     canvas.setAttribute('width', width);
     canvas.setAttribute('height', height);
     canvas.setAttribute('id', canvasId);

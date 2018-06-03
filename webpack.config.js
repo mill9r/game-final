@@ -6,8 +6,11 @@ module.exports = {
         filename: "build.js",
         library: 'index'
     },
-    watchOptions:{
-        aggregateTimeout:300
+
+    watch: true,
+
+    watchOptions: {
+        aggregateTimeout: 300
     },
     devtool: 'source-map'
 };

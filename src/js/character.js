@@ -12,11 +12,14 @@ class Character {
         );
         this.charX = charX;
         this.charY = charY;
+        this.breathAmt = 0;
+        this.breathDirection = 1;
     }
 
-    set(field, func, time) {
+    set(field, func,args, time) {
+        //TODO how it's works?
         if(this.index === this.personSize){
-            this[field].onload = setInterval(func, time);
+            this[field].onload = setInterval(func.bind(null,...args), time);
         }
     }
 }

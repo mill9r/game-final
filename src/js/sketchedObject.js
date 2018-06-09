@@ -1,6 +1,6 @@
 import {loadImage} from "./utils";
 
-class Character {
+class SketchedObject {
 
     constructor(person, charX, charY, path) {
         this.index = 0;
@@ -25,7 +25,7 @@ class Character {
 }
 
 
-export {Character}
+export {SketchedObject}
 
 
 

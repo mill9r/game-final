@@ -14,10 +14,9 @@ export const addCanvas = (canvasId, width, height, div) => {
     return canvas;
 };
 
-export const redraw = (obj, position, canvas, eyes) => {
+export const redrawCharacter = (obj, position, canvas, clearArea, eyes) => {
     const context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    //TODO use lodash foreach(zip)
+    clearCanvas(canvas, ...clearArea);
     obj.person.forEach((value, i) => {
         if (value[1] === 'torso' || value[1] === 'legs') {
             context.drawImage(value[0], obj.charX + position[i][0], obj.charY + position[i][1]);
@@ -26,8 +25,36 @@ export const redraw = (obj, position, canvas, eyes) => {
             context.drawImage(value[0], obj.charX + position[i][0], obj.charY + position[i][1] - obj.breathAmt);
         }
     });
-    drawEyes(obj.charX + eyes['left'], obj.charY - eyes['right'] - obj.breathAmt, 8, 14, context); // Left Eye
-    drawEyes(obj.charX + eyes['left'] + 10, obj.charY - eyes['right'] - obj.breathAmt, 8, 14, context); // Right Eye
+    if (eyes !== undefined) {
+        drawEyes(obj.charX + eyes['xPox'], obj.charY - eyes['yPos'] - obj.breathAmt, 8, 14, context); // Left Eye
+        drawEyes(obj.charX + eyes['xPox'] + 10, obj.charY - eyes['yPos'] - obj.breathAmt, 8, 14, context); // Right Eye
+    }
+
+};
+
+export const drawMagic = (obj, canvas, position, clearArea) => {
+    const ctx = canvas.getContext('2d');
+    clearCanvas(canvas, ...clearArea);
+    ctx.drawImage(obj.person[getRandomInt(obj.person.length)][0], obj.charX + position[0], obj.charY + position[1]);
+};
+
+export const clearCanvas = (canvas, xPos, yPos, width, height) => {
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(xPos, yPos, width, height);
+};
+
+export const clearCanvasWithPosition = (ctx, canvas, xPos, yPos) => {
+
+};
+
+export const isCanvasSupported = function () {
+    const elem = document.createElement('canvas');
+    return !!(elem.getContext && elem.getContext('2d'));
+};
+
+export const getRandomInt = max => {
+    return Math.floor(Math.random() * Math.floor(max));
 };
 
 const breath = (obj) => {

@@ -118,9 +118,9 @@ var Ball = function() {
 }
 
 var canvasWidth = 490, canvasHeight = 220;
-
+var speed = 15;
 var ball = new Ball();
 ball.setX(canvasWidth);
 ball.setY(200);
 ball.roll(speed, -1);
-displayList.push(ball);
+// displayList.push(ball);

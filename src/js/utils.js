@@ -44,10 +44,6 @@ export const clearCanvas = (canvas, xPos, yPos, width, height) => {
     ctx.fillRect(xPos, yPos, width, height);
 };
 
-export const clearCanvasWithPosition = (ctx, canvas, xPos, yPos) => {
-
-};
-
 export const isCanvasSupported = function () {
     const elem = document.createElement('canvas');
     return !!(elem.getContext && elem.getContext('2d'));

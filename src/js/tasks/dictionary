@@ -1,0 +1,25 @@
+import {setResult} from "./tasks.js";
+const _ = require('lodash');
+
+export const translateTask = () => {
+    document.getElementById('myModal').style.display = "none";
+    const start = () => {
+        fetch('https://api.myjson.com/bins/1162u2')
+            .then(res => res.json())
+            .then(response => {
+                setTask(response)})
+            .then( respon => {document.getElementById('mathModal').style.display = "inherit"})
+    };
+    start();
+};
+
+const setTask = (response) => {
+    let map = new Map();
+    Object.keys(response).forEach(key => {
+        map.set(key, response[key]);
+    });
+    const index = _.random(0, map.size-1);
+    let question = Array.from(map.keys())[index];
+    document.getElementById('acquisition').innerHTML = question;
+    setResult(map.get(question));
+};

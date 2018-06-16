@@ -14,15 +14,19 @@ export const addCanvas = (canvasId, width, height, div) => {
     return canvas;
 };
 
-export const redrawCharacter = (obj, position, canvas, clearArea, eyes) => {
-    const context = canvas.getContext('2d');
-    clearCanvas(canvas, ...clearArea);
-    obj.person.forEach((value, i) => {
-        if (value[1] === 'torso' || value[1] === 'legs') {
+export const redrawCharacter = (obj, position, context, clearArea, eyes) => {
+    console.log('obj', obj, position, context, clearArea, eyes);
+    clearCanvas(context, ...clearArea);
+    obj.object.forEach((value, i) => {
+        if (value[1].includes('torso') || value[1].includes('legs')) {
             context.drawImage(value[0], obj.charX + position[i][0], obj.charY + position[i][1]);
+            // TODO for debug
+            addBorder(context, obj.charX + position[i][0], obj.charY + position[i][1], value[0])
         } else {
             breath(obj);
             context.drawImage(value[0], obj.charX + position[i][0], obj.charY + position[i][1] - obj.breathAmt);
+            // TODO for debug
+            addBorder(context, obj.charX + position[i][0], obj.charY + position[i][1], value[0])
         }
     });
     if (eyes !== undefined) {
@@ -32,14 +36,55 @@ export const redrawCharacter = (obj, position, canvas, clearArea, eyes) => {
 
 };
 
-export const drawMagic = (obj, canvas, position, clearArea) => {
-    const ctx = canvas.getContext('2d');
-    clearCanvas(canvas, ...clearArea);
-    ctx.drawImage(obj.person[getRandomInt(obj.person.length)][0], obj.charX + position[0], obj.charY + position[1]);
+export const drawMagic = (ctx, canvas) => {
+    clearCanvas(canvas, obj.charX, obj.charY, obj.object[0][0].width, obj.object[0][0].height);
+    // TODO for debug
+    addBorder(ctx, obj.charX, obj.charY, obj.object[0][0]);
+    ctx.drawImage(obj.object[getRandomInt(obj.object.length)][0], obj.charX, obj.charY);
 };
 
-export const clearCanvas = (canvas, xPos, yPos, width, height) => {
-    const ctx = canvas.getContext('2d');
+// export const drawMagicSequence = (obj, ctx, i) => {
+//     // TODO for debug
+//     addBorder(ctx, obj.charX, obj.charY, obj.object[0][0]);
+//     clearCanvas(canvas, obj.charX, obj.charY, obj.object[0][0].width, obj.object[0][0].height);
+//     ctx.drawImage(obj.object[i.counter][0], obj.charX, obj.charY);
+//     if (i.counter === obj.object.length - 1) {
+//         i.counter = 0;
+//     } else {
+//         i.counter += 1;
+//     }
+// };
+
+
+export const animateObject = (ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition) => {
+    ctx.clearRect(dx - subtract, dy - subtract, width + subtract, height + subtract);  // clear canvas
+    ctx.drawImage(obj.object[0][0], dx, dy);                       // draw image at current position
+    let movementPoint = moveAxe === 'dx' ? dx += incr : dy += incr;
+    if (movementPoint < movementToPosition) {
+        requestAnimationFrame(animateObject.bind(null, ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition))  // loop
+    } else {
+        ctx.clearRect(dx - subtract, dy - subtract, width + subtract, height + subtract);
+        makeExplosion(ctx, explosion, dx, dy, explosion.object[0][0].width, explosion.object[0][0].height)
+    }
+
+};
+
+
+export const makeExplosion = (ctx, obj, dx, dy, width, height) => {
+    //TODO for debug
+    addBorder(ctx, dx, dy, obj.object[0][0]);
+    for (let i = 0; i < obj.object.length; i++) {
+        setTimeout(createImage.bind(null, ctx, obj.object[i][0], dx, dy, width, height, 100 * i), 100 * i);
+    }
+};
+
+
+const createImage = (ctx, img, dx, dy, width, height, time) => {
+    ctx.drawImage(img, dx, dy);
+    setTimeout(clearCanvas.bind(null, ctx, dx, dy, width, height), time);
+};
+
+export const clearCanvas = (ctx, xPos, yPos, width, height) => {
     ctx.fillStyle = '#fff';
     ctx.fillRect(xPos, yPos, width, height);
 };
@@ -88,4 +133,34 @@ const drawEyes = (centerX, centerY, width, height, context) => {
     context.fillStyle = "black";
     context.fill();
     context.closePath();
+};
+
+const addBorder = (ctx, dx, dy, img) => {
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(dx, dy, img.width, img.height);
+};
+
+
+export const writeMessage = (canvas, message) => {
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = '18pt Calibri';
+    context.fillStyle = 'black';
+    context.fillText(message, 10, 25);
+};
+
+export const getMousePos = (canvas, evt) => {
+    const rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
+};
+
+
+const sleep = ms => {
+    ms += new Date().getTime();
+    while (new Date() < ms) {
+    }
 };

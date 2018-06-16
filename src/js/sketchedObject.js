@@ -1,13 +1,12 @@
 import {loadImage} from "./utils";
 
 class SketchedObject {
-
-    constructor(person, charX, charY, path) {
+    constructor(object, charX, charY, path) {
         this.index = 0;
-        this.personSize = person.length;
-        this.person = person.map((value, index) => {
+        this.objSize = object.length;
+        this.object = object.map((value, index) => {
                 index++;
-                return loadImage(value,path);
+                return loadImage(value, path);
             }
         );
         this.charX = charX;
@@ -16,11 +15,9 @@ class SketchedObject {
         this.breathDirection = 1;
     }
 
-    set(field, func,args, time) {
-        //TODO how it's works?
-        if(this.index === this.personSize){
-            this[field].onload = setInterval(func.bind(null,...args), time);
-        }
+    set(xPoint, yPoint) {
+        this.charX = xPoint;
+        this.charY = yPoint;
     }
 }
 

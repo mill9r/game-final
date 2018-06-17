@@ -1,4 +1,6 @@
 import {getAnswer} from "./dragAndDrop";
+import {attack} from "../index";
+import {getCurrentHealth} from "../utils";
 
 const _ = require('lodash');
 
@@ -39,13 +41,14 @@ export const checkResult = () => {
             userAnswerField.style.color = "red";
         }
         setTimeout(() => {
-            document.getElementById('result').value="";
+            document.getElementById('result').value = "";
             document.getElementById('play').style.display = "none";
-            document.getElementById('equation').innerHTML="";
+            document.getElementById('equation').innerHTML = "";
             document.getElementById('taskModal').style.display = "none";
             userAnswerField.innerHTML = "";
-        }, 1000)
+        }, 100);
 
+        attack(answerResult);
     }
 };
 

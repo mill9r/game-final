@@ -15,18 +15,13 @@ export const addCanvas = (canvasId, width, height, div) => {
 };
 
 export const redrawCharacter = (obj, position, context, clearArea, eyes) => {
-    // console.log('obj', obj, position, context, clearArea, eyes);
     clearCanvas(context, ...clearArea);
     obj.object.forEach((value, i) => {
         if (value[1].includes('torso') || value[1].includes('legs')) {
             context.drawImage(value[0], obj.charX + position[i][0], obj.charY + position[i][1]);
-            // TODO for debug
-            addBorder(context, obj.charX + position[i][0], obj.charY + position[i][1], value[0])
         } else {
             breath(obj);
             context.drawImage(value[0], obj.charX + position[i][0], obj.charY + position[i][1] - obj.breathAmt);
-            // TODO for debug
-            addBorder(context, obj.charX + position[i][0], obj.charY + position[i][1], value[0])
         }
     });
     if (eyes !== undefined) {
@@ -38,23 +33,7 @@ export const redrawCharacter = (obj, position, context, clearArea, eyes) => {
 
 export const drawMagic = (ctx, canvas) => {
     clearCanvas(canvas, obj.charX, obj.charY, obj.object[0][0].width, obj.object[0][0].height);
-    // TODO for debug
-    addBorder(ctx, obj.charX, obj.charY, obj.object[0][0]);
     ctx.drawImage(obj.object[getRandomInt(obj.object.length)][0], obj.charX, obj.charY);
-};
-
-export const animateObject = (ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition, direction) => {
-    console.log(ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition);
-    ctx.clearRect(dx - subtract, dy - subtract, width + subtract, height + subtract);  // clear canvas
-    ctx.drawImage(obj.object[0][0], dx, dy);                       // draw image at current position
-    let movementPoint = moveAxe === 'dx' ? dx += incr : dy += incr;
-    if (checkResult(movementPoint, movementToPosition, direction)) {
-        requestAnimationFrame(animateObject.bind(null, ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition, direction))  // loop
-    } else {
-        ctx.clearRect(dx - subtract, dy - subtract, width + subtract, height + subtract);
-        makeExplosion(ctx, explosion, dx, dy, explosion.object[0][0].width, explosion.object[0][0].height)
-    }
-    return true;
 };
 
 const checkResult = (movementPoint, movementToPosition, direction) => {
@@ -66,18 +45,66 @@ const checkResult = (movementPoint, movementToPosition, direction) => {
     }
 };
 
-export const subtractHealth = (element, currentValue, subTrck) => {
+export const subtractHealth = (element, currentValue, subTrck, person) => {
+    const secondIdPart = 'Health';
+    const value = document.getElementById(person + secondIdPart);
     currentValue -= subTrck;
+    value.innerHTML = currentValue;
     element.style.width = currentValue + '%';
     return currentValue;
 };
 
-export const makeExplosion = (ctx, obj, dx, dy, width, height) => {
-    //TODO for debug
-    addBorder(ctx, dx, dy, obj.object[0][0]);
+export const getCurrentHealth = person => {
+    const value = document.getElementById(person);
+    const width = value.style.width.replace('%', '');
+    return Number(width);
+};
+
+export const revertPerson = name => {
+    const revertedName = {'zombie': 'hero', 'hero': 'zombie'};
+    return revertedName[name];
+};
+
+export const animateObject = (ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition, direction) => {
+    const size = 90;
+    width = size;
+    height = size;
+    ctx.clearRect(dx - subtract, dy - subtract, width + subtract, height + subtract);  // clear canvas
+    ctx.drawImage(obj.object[0][0], dx, dy);                                          // draw image at current position
+    let movementPoint = moveAxe === 'dx' ? dx += incr : dy += incr;
+    if (checkResult(movementPoint, movementToPosition, direction)) {
+        requestAnimationFrame(animateObject.bind(null, ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition, direction))  // loop
+    } else {
+        ctx.clearRect(dx-subtract, dy-subtract, width + subtract, height + subtract);
+        makeExplosion(ctx, explosion, dx, dy, explosion.object[0][0].width, explosion.object[0][0].height)
+    }
+    return true;
+};
+
+const makeExplosion = (ctx, obj, dx, dy, width, height) => {
     for (let i = 0; i < obj.object.length; i++) {
         setTimeout(createImage.bind(null, ctx, obj.object[i][0], dx, dy, width, height, 100 * i), 100 * i);
     }
+};
+
+export const fillZombieLive = (healtAmount, zombieNameAdj, zombieNameType, zombieNameList) => {
+    const nameRange = 5;
+    const zombieNameId = document.getElementById("zombieName");
+    const zombieName = _.concat(zombieNameAdj[getRandomInt(nameRange)], zombieNameType[getRandomInt(nameRange)], zombieNameList[getRandomInt(nameRange)]);
+    zombieNameId.innerHTML = zombieName.join(' ');
+    const zombieHealthLine = document.getElementById('zombie');
+    zombieHealthLine.style.width = healtAmount + '%';
+    const zombieHealth = document.getElementById('zombieHealth');
+    zombieHealth.innerHTML = healtAmount;
+};
+
+export const fillHeroLive = (name, healthAmount) => {
+    const heroName = document.getElementById("heroName");
+    heroName.innerHTML = name;
+    const heroHealthLine = document.getElementById('hero');
+    heroHealthLine.style.width = healthAmount + '%';
+    const heroHealth = document.getElementById('heroHealth');
+    heroHealth.innerHTML = healthAmount;
 };
 
 const createImage = (ctx, img, dx, dy, width, height, time) => {
@@ -86,7 +113,7 @@ const createImage = (ctx, img, dx, dy, width, height, time) => {
 };
 
 export const clearCanvas = (ctx, xPos, yPos, width, height) => {
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = 'antiquewhite';
     ctx.fillRect(xPos, yPos, width, height);
 };
 

@@ -12,7 +12,7 @@ export const mathTask = () => {
     document.getElementById('equation').innerHTML = firstNumber + " " + sign + " " + secondNumber+ " = ";
     document.getElementById('description').innerHTML =( getTaskDescription())[0];
 
-    document.getElementById('result').style.display = "grid";
+    document.getElementById('input').style.display = "grid";
     document.getElementById('taskModal').style.display = "grid";
 };
 

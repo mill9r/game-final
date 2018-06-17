@@ -12,7 +12,7 @@ export const dragAndDropTask = () => {
                 setTask(response)
             })
             .then(respon => {
-                document.getElementsByClassName('input-answer')[0].style.display = "none";
+                document.getElementById('input').style.display = "none";
                 document.getElementById('taskModal').style.display = "grid";
             })
     };

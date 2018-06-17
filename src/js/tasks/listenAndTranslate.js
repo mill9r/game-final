@@ -1,7 +1,8 @@
 import {setRightResult, setLanguage, setWord} from "./tasks.js";
 import {taskDescription} from "./tasks";
+import {baseLogic} from "./listening";
 
-export const listeningTask = () => {
+export const listeningAndTranslateTask = () => {
     document.getElementById('myModal').style.display = "none";
     document.getElementById('play').style.display = "flex";
     const start = () => {
@@ -15,7 +16,7 @@ export const listeningTask = () => {
                 document.getElementById('input').style.display = "grid";
             })
     };
-    startHealth();
+    start();
 };
 
 const setTask = (response) => {
@@ -25,9 +26,10 @@ const setTask = (response) => {
     });
     const index = _.random(0, map.size - 1);
     let question = Array.from(map.keys())[index];
-    document.getElementById('description').innerHTML = taskDescription[3];
+    document.getElementById('description').innerHTML = taskDescription[4];
 
-    setRightResult(question);
+    setRightResult(map.get(question));
     setLanguage("en-US");
     setWord(question);
 };
+

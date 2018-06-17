@@ -1,0 +1,95 @@
+.game-container {
+    display: grid;
+    grid-template-columns: auto 1000px auto;
+    grid-template-areas: '. game-location .';
+}
+
+.gameLocation {
+    display: grid;
+    grid-area: game-location;
+    grid-template-rows: 10% 90%;
+    grid-template-areas: 'health' 'game';
+
+}
+
+.game-field {
+    grid-area: game;
+}
+
+.health {
+    display: grid;
+    grid-area: health;
+    grid-template-columns: auto minmax(30px, 60px) auto;
+    grid-template-rows: auto;
+    grid-template-areas: 'hero-health . rival-health';
+}
+
+.health-hero {
+    display: grid;
+    grid-area: hero-health;
+    grid-template-columns: 6fr 1fr 3fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: ' hero-name hero-health-value .' 'hero-health-progress hero-health-progress hero-health-progress';
+}
+
+.hero-name {
+    grid-area: hero-name;
+}
+
+.hero-health-value {
+    grid-area: hero-health-value;
+    justify-self: start;
+}
+
+#hero {
+    grid-area: hero-health-progress;
+    justify-self: start;
+}
+
+.health-rival {
+    display: grid;
+    grid-area: rival-health;
+    grid-template-columns: 3fr 1fr 6fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: '. rival-health-value rival-name' 'rival-health-progress rival-health-progress rival-health-progress';
+}
+
+.rival-name {
+    grid-area: rival-name;
+    justify-self: end;
+
+}
+
+.rival-health-value {
+    grid-area: rival-health-value;
+
+}
+
+#rival {
+    grid-area: rival-health-progress;
+    justify-self: end;
+}
+
+progress {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #3CB371;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress[value]::-webkit-progress-value {
+    background-image: -webkit-linear-gradient(-45deg,
+    transparent 33%, rgba(0, 0, 0, .1) 33%,
+    rgba(0, 0, 0, .1) 66%, transparent 66%),
+    -webkit-linear-gradient(top,
+            rgba(255, 255, 255, .25),
+            rgba(0, 0, 0, .25)),
+    -webkit-linear-gradient(left, #09c, #f44);
+
+    border-radius: 2px;
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}

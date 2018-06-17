@@ -15,7 +15,7 @@ export const addCanvas = (canvasId, width, height, div) => {
 };
 
 export const redrawCharacter = (obj, position, context, clearArea, eyes) => {
-    console.log('obj', obj, position, context, clearArea, eyes);
+    // console.log('obj', obj, position, context, clearArea, eyes);
     clearCanvas(context, ...clearArea);
     obj.object.forEach((value, i) => {
         if (value[1].includes('torso') || value[1].includes('legs')) {
@@ -30,8 +30,8 @@ export const redrawCharacter = (obj, position, context, clearArea, eyes) => {
         }
     });
     if (eyes !== undefined) {
-        drawEyes(obj.charX + eyes['xPox'], obj.charY - eyes['yPos'] - obj.breathAmt, 8, 14, context); // Left Eye
-        drawEyes(obj.charX + eyes['xPox'] + 10, obj.charY - eyes['yPos'] - obj.breathAmt, 8, 14, context); // Right Eye
+        drawEyes(obj.charX + eyes['xPos'], obj.charY - eyes['yPos'] - obj.breathAmt, 8, 14, context); // Left Eye
+        drawEyes(obj.charX + eyes['xPos'] + 10, obj.charY - eyes['yPos'] - obj.breathAmt, 8, 14, context); // Right Eye
     }
 
 };
@@ -43,32 +43,34 @@ export const drawMagic = (ctx, canvas) => {
     ctx.drawImage(obj.object[getRandomInt(obj.object.length)][0], obj.charX, obj.charY);
 };
 
-// export const drawMagicSequence = (obj, ctx, i) => {
-//     // TODO for debug
-//     addBorder(ctx, obj.charX, obj.charY, obj.object[0][0]);
-//     clearCanvas(canvas, obj.charX, obj.charY, obj.object[0][0].width, obj.object[0][0].height);
-//     ctx.drawImage(obj.object[i.counter][0], obj.charX, obj.charY);
-//     if (i.counter === obj.object.length - 1) {
-//         i.counter = 0;
-//     } else {
-//         i.counter += 1;
-//     }
-// };
-
-
-export const animateObject = (ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition) => {
+export const animateObject = (ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition, direction) => {
+    console.log(ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition);
     ctx.clearRect(dx - subtract, dy - subtract, width + subtract, height + subtract);  // clear canvas
     ctx.drawImage(obj.object[0][0], dx, dy);                       // draw image at current position
     let movementPoint = moveAxe === 'dx' ? dx += incr : dy += incr;
-    if (movementPoint < movementToPosition) {
-        requestAnimationFrame(animateObject.bind(null, ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition))  // loop
+    if (checkResult(movementPoint, movementToPosition, direction)) {
+        requestAnimationFrame(animateObject.bind(null, ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition, direction))  // loop
     } else {
         ctx.clearRect(dx - subtract, dy - subtract, width + subtract, height + subtract);
         makeExplosion(ctx, explosion, dx, dy, explosion.object[0][0].width, explosion.object[0][0].height)
     }
-
+    return true;
 };
 
+const checkResult = (movementPoint, movementToPosition, direction) => {
+    if (direction === 'negative') {
+        return movementPoint > movementToPosition;
+    }
+    if (direction === 'positive') {
+        return movementPoint < movementToPosition;
+    }
+};
+
+export const subtractHealth = (element, currentValue, subTrck) => {
+    currentValue -= subTrck;
+    element.style.width = currentValue + '%';
+    return currentValue;
+};
 
 export const makeExplosion = (ctx, obj, dx, dy, width, height) => {
     //TODO for debug
@@ -77,7 +79,6 @@ export const makeExplosion = (ctx, obj, dx, dy, width, height) => {
         setTimeout(createImage.bind(null, ctx, obj.object[i][0], dx, dy, width, height, 100 * i), 100 * i);
     }
 };
-
 
 const createImage = (ctx, img, dx, dy, width, height, time) => {
     ctx.drawImage(img, dx, dy);

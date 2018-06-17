@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="src/css/health.css" rel="stylesheet">
 </head>
 <body>
-<div class="gameLocation">
-    <div class="health">
-        <div class="health-hero">
-            <div class="hero-health-value"></div>
-            <progress id="hero"></progress>
-        </div>
-        <div class="health-rival">
-            <div class="rival-health-value"></div>
-            <progress id="rival"></progress>
-        </div>
+<div class="game-container">
+    <div class="gameLocation">
+        <div class="health">
+            <div class="health-hero">
+                <div class="hero-name" id="heroName">Miller</div>
+                <div class="hero-health-value">100</div>
+                <progress id="hero"></progress>
+            </div>
+            <div class="health-rival">
+                <div class="rival-name" id="rivalName">Zombie Rombie</div>
+                <div class="rival-health-value">100</div>
+                <progress id="rival"></progress>
+            </div>
 
+        </div>
+        <div id="gameField" class="game-field"></div>
     </div>
-    <div id="gameField"></div>
 </div>
-
 </body>
 
 <script type="text/javascript" src="dist/build.js"></script>

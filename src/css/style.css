@@ -1,0 +1,179 @@
+body{
+background: antiquewhite;
+}
+.modal{
+    margin: auto;
+    z-index: 1;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fefefe;
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    z-index: 1;
+
+}
+
+.incantation{
+    display: none;
+    background-image: url("../img/spell/background.png");
+    background-size: 100% ;
+    border-radius: 50%;
+    width: 500px;
+    height: 500px;
+    align-items: center;
+    grid-template-rows: 33% auto 33%;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-areas:
+            '. spell-1 . spell-2 .'
+            ' spell-3 . . . spell-4'
+            '. spell-5 . spell-6 .';
+}
+.spell-1{
+    grid-area: spell-1;
+}
+.spell-2{
+    grid-area: spell-2;
+}
+.spell-3{
+    grid-area: spell-3;
+}
+.spell-4{
+    grid-area: spell-4;
+}
+.spell-5{
+    grid-area: spell-5;
+}
+.spell-6{
+    grid-area: spell-6;
+}
+/* Modal Content/Box */
+.text {
+    width: 200px;
+    height: 150px;
+    margin: 5px auto;
+    overflow: hidden;
+}
+[class*="spell"]{
+    height: 100px;
+    width: 100px;
+    align-content: center;
+    text-align: center;
+}
+
+.task{
+    font-size: 25px;
+    display: none;
+    padding: 30px;
+    width: 800px;
+    height: 500px;
+    align-items: center;
+    justify-items: center;
+    background: #fefefe;
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+.equation{
+    display: flex;
+    flex-direction: row;
+}
+#equation{
+    padding: 10px;
+}
+.input-answer{
+    padding: 10px;
+}
+
+.send-result{
+    width: 80px;
+    height: 50px;
+    font-size: 20px;
+}
+.result{
+    width: 60px;
+    height: 25px;
+}
+
+.task-description{
+    margin: 10px;
+}
+
+#sortable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 60%;
+    display: inherit;
+}
+#sortable li {
+    margin: 0 3px 3px 3px;
+    padding: 0.4em;
+    font-size: 1.4em;
+    border: solid;
+}
+#sortable li span {
+    position: absolute;
+    margin-left: -1.3em;
+}
+.default {
+    background: #cedc98;
+    border: 1px solid #DDDDDD;
+    color: #333333;
+}
+
+
+.play-task{
+    display: none;
+}
+.play-button {
+    font-size: 10px;
+    margin: 0 15px;
+    position: relative;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 2.5em 0 2.5em 5em;
+    border-color: transparent transparent transparent #000;
+    opacity: .75;
+}
+
+/*register */
+.register-modal{
+    display: flex;
+    background: white;
+    width: 400px;
+    height: 350px;
+    justify-content: center;
+
+}
+.register-title{
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.user-form {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 20px;
+    color: burlywood;
+}
+input, select {
+    width: 200px;
+    height: 36px;
+    border: 1px solid antiquewhite;
+    margin: 10px 0px 20px 1px;
+    font-size: 16px;
+}
+
+::placeholder {
+    padding: 15px;
+}
+
+input[type=submit] {
+    background-color: burlywood;
+    font-size: 20px;
+    color: #fff;
+    margin: 0 auto;
+}

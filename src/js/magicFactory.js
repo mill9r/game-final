@@ -29,10 +29,10 @@ class MagicFactory {
 
         }
         if (type === 'fireFist') {
-            const fireFist = ['fireFist0'];
+            const fireFist = ['fire_fist0'];
             const fireFistObj = new SketchedObject(fireFist, 0, 0, 'img/magic_zombie');
 
-            const fireFistExplosion = ['fireFist1', 'fireFist2', 'fireFist3', 'fireFist4'];
+            const fireFistExplosion = ['fire_fist1', 'fire_fist2', 'fire_fist3', 'fire_fist4'];
             const fireFistExplosionObj = new SketchedObject(fireFistExplosion, 0, 0, 'img/magic_zombie');
             return [fireFistObj, fireFistExplosionObj]
         }

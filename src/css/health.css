@@ -19,7 +19,7 @@
 .health {
     display: grid;
     grid-area: health;
-    grid-template-columns: auto minmax(30px, 60px) auto;
+    grid-template-columns: auto 60px auto;
     grid-template-rows: auto;
     grid-template-areas: 'hero-health . rival-health';
 }
@@ -27,9 +27,9 @@
 .health-hero {
     display: grid;
     grid-area: hero-health;
-    grid-template-columns: 6fr 1fr 3fr;
+    grid-template-columns: 276px 46px 138px;
     grid-template-rows: auto auto;
-    grid-template-areas: ' hero-name hero-health-value .' 'hero-health-progress hero-health-progress hero-health-progress';
+    grid-template-areas: ' hero-name hero-health-value .' 'hero-health-progress . .';
 }
 
 .hero-name {
@@ -49,9 +49,9 @@
 .health-rival {
     display: grid;
     grid-area: rival-health;
-    grid-template-columns: 3fr 1fr 6fr;
+    grid-template-columns: 138px 46px 276px;
     grid-template-rows: auto auto;
-    grid-template-areas: '. rival-health-value rival-name' 'rival-health-progress rival-health-progress rival-health-progress';
+    grid-template-areas: '. rival-health-value rival-name' '. . rival-health-progress';
 }
 
 .rival-name {
@@ -65,7 +65,7 @@
 
 }
 
-#rival {
+#zombie {
     grid-area: rival-health-progress;
     justify-self: end;
 }

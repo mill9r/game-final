@@ -28,14 +28,18 @@ import {SketchedObject} from "./sketchedObject";
 import {
     redrawCharacter,
     addCanvas,
-    clearCanvas,
     isCanvasSupported,
-    getRandomInt,
     drawMagic,
-    writeMessage,
-    getMousePos,
+    getRandomInt,
     drawMagicSequence,
-    animateObject, makeExplosion, executeInSequence
+    animateObject,
+    makeExplosion,
+    executeInSequence,
+    subtractHealth,
+    revertPerson,
+    fillZombieLive,
+    fillHeroLive,
+    getCurrentHealth
 } from "./utils";
 import {MagicFactory} from "./magicFactory";
 import {ZombieFactory} from "./zombieFactory";
@@ -52,8 +56,15 @@ const gameContainer = addCanvas(id, fieldWidth, fieldHeight, gameField);
 const ctx = gameContainer.getContext('2d');
 const personsPosition = {
     'hero': [100, 460],
-    'rival': [840, 460]
+    'zombie': [840, 460]
 };
+
+const zombieNameAdj = ['ugly', 'terrible', 'anger', 'mad', 'unlucky'];
+const zombieNameType = ['dead', 'undead', 'ork', 'zombie', 'torn to pieces'];
+const zombieNameList = ['Tom', 'Jack', 'Max', 'John', 'Sam'];
+
+const startHealth = 100;
+const clearArea = 5;
 
 const magic = {
     'heroVertical': {
@@ -61,7 +72,7 @@ const magic = {
         'yPos': 30,
         'axis': 'dy',
         'increment': 5,
-        'clearArea': 5,
+        'clearArea': clearArea,
         'stop': 290,
         'direction': 'positive'
     },
@@ -70,7 +81,7 @@ const magic = {
         'yPos': 30,
         'axis': 'dy',
         'increment': 5,
-        'clearArea': 5,
+        'clearArea': clearArea,
         'stop': 290,
         'direction': 'positive'
     },
@@ -79,7 +90,7 @@ const magic = {
         'yPos': 390,
         'axis': 'dx',
         'increment': 5,
-        'clearArea': 5,
+        'clearArea': clearArea,
         'stop': 750,
         'direction': 'positive'
     },
@@ -88,11 +99,13 @@ const magic = {
         'yPos': 390,
         'axis': 'dx',
         'increment': -5,
-        'clearArea': 5,
+        'clearArea': clearArea,
         'stop': 190,
         'direction': 'negative'
     }
 };
+
+const spells = ['blackStone', 'stone', 'fire', 'fireFist'];
 
 const attackType = {
     'hero': ['heroVertical', 'heroHorizontal'],
@@ -102,54 +115,63 @@ const attackType = {
 export const creatHero = () => {
     const hero = ['leftArm', 'legs', 'torso', 'weapon', 'rightArm', 'head', 'hair',];
     const heroEyes = {'xPos': 59, 'yPos': 25};
-    const person = new SketchedObject(hero, 100, 460, 'img');
+    const person = new SketchedObject(hero, 0, 0, 'img');
+    person.set(personsPosition['hero'][0], personsPosition['hero'][1]);
     const position = [[40, 8], [0, 50], [0, 0], [65, -57], [-12, -3], [0, -80], [-28, -96]];
     const clearHeroArea = [71, 360, 165, 180];
     setInterval(redrawCharacter.bind(null, person, position, ctx, clearHeroArea, heroEyes), milliseconds / fps);
 };
 
-creatHero();
 
 export const createZombie = () => {
     const zombiePosition = [[-40, 8], [-25, 50], [0, 0], [-1, 2], [-78, -75], [-30, -80]];
     const clearZombieArea = [750, 360, 150, 180];
     const zombiePerson = new ZombieFactory();
     const zombie = zombiePerson.create();
-    zombie.set(840, 460);
+    zombie.set(personsPosition['zombie'][0], personsPosition['zombie'][1]);
     setInterval(redrawCharacter.bind(null, zombie, zombiePosition, ctx, clearZombieArea), milliseconds / fps);
 };
 
-createZombie();
-
-
-export const makeAttack = (ctx, person, spell) => {
+export const makeAttack = (ctx, action, spell) => {
+    const waitTime = 2500;
+    const person = action === true ? 'hero' : 'zombie';
     const fabric = new MagicFactory();
     const attack = fabric.create(spell);
     const attackAxis = attackType[person][getRandomInt(2)];
     const paramsForAnimateObject = magic[attackAxis];
-    // const promise = new Promise(
+
     animateObject(ctx, attack[0], paramsForAnimateObject['xPos'], paramsForAnimateObject['yPos'],
         attack[0].object[0][0].width, attack[0].object[0][0].height, paramsForAnimateObject['clearArea'],
         attack[1], paramsForAnimateObject['increment'], paramsForAnimateObject['axis'], paramsForAnimateObject['stop'],
-        paramsForAnimateObject['direction'])
-    // );
-    // promise.then(() => console.log('After execution', res));
+        paramsForAnimateObject['direction']);
+
+    const health = document.getElementById(revertPerson(person));
+    const width = health.style.width.replace('%', '');
+    setTimeout(subtractHealth.bind(null, health, Number(width), 10, revertPerson(person)), waitTime)
 };
 
 
-makeAttack(ctx, 'zombie', 'stone');
+export const startGame = (name) => {
+    fillHeroLive(name, startHealth);
+    creatHero();
 
-//health
-// const bar = document.getElementById('elem');
-// bar.style.width = 100 + '%';
-// let health = 100;
-// elem.onclick = function () {
-//     health -= 10;
-//     elem.style.width = health + '%';
-// };
+};
 
 
-// animateObject(ctx, stoneObj, 100, 30, stoneObj.object[0][0].width, stoneObj.object[0][0].height, 5, stoneFallObj, 4, 'dy', 290);
+
+export const createNewZombie = () => {
+    if (getCurrentHealth('zombie') === 0) {
+        fillZombieLive(startHealth, zombieNameAdj, zombieNameType, zombieNameList);
+        createZombie();
+    }
+};
+
+setInterval(createNewZombie,1000);
+
+startGame('John');
+makeAttack(ctx, false, spells[getRandomInt(4)]);
+
+
 
 
 // const cloud = ['cloud'];
@@ -170,12 +192,12 @@ makeAttack(ctx, 'zombie', 'stone');
 // setInterval(drawMagic.bind(null, zombieLight, ctx), milliseconds / fps);
 
 
-//  TODO for  debug
-const context = gameContainer.getContext('2d');
 
-gameContainer.addEventListener('mousemove', function (evt) {
-    const mousePos = getMousePos(gameContainer, evt);
-    const message = 'Mouse position: x = ' + Math.round(mousePos.x) + ', y = ' + Math.round(mousePos.y);
-    writeMessage(gameContainer, message);
-}, false);
+// const context = gameContainer.getContext('2d');
+//
+// gameContainer.addEventListener('mousemove', function (evt) {
+//     const mousePos = getMousePos(gameContainer, evt);
+//     const message = 'Mouse position: x = ' + Math.round(mousePos.x) + ', y = ' + Math.round(mousePos.y);
+//     writeMessage(gameContainer, message);
+// }, false);
 

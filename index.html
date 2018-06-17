@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<link href="src/css/style.css" rel="stylesheet">
+<link href="src/css/health.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- The Modal -->
+<section id="myModal" class="incantation modal">
+    <div class="spell-1"><img class="spell" src="src/img/spell/2.png" data-action="act1"/> Math</div>
+    <div class="spell-2"><img class="spell" src="src/img/spell/3.png" data-action="act2"/> Translate</div>
+    <div class="spell-3"><img class="spell" src="src/img/spell/4.png" data-action="act3"/> Drag and Drop</div>
+    <div class="spell-4"><img class="spell" src="src/img/spell/5.png" data-action="act4"/> Listen</div>
+    <div class="spell-5"><img class="spell" src="src/img/spell/6.png" data-action="act5"/> Listen - traslate</div>
+    <div class="spell-6"><img class="spell" src="src/img/spell/7.png" data-action="act6"/> ASD</div>
+</section>
+<section class="task modal" id="taskModal">
+    <div id="description" class="task-description"></div>
+
+    <div class="play-task" id="play">
+        <div>Play</div>
+        <div class="play-button" id="play-button"></div>
+    </div>
+
+
+    <div class="equation" id="question">
+        <div id="equation"></div>
+        <div class="input-answer" id="input">
+            <input type="text" id="result" class="result" name="answer" required><br>
+        </div>
+    </div>
+
+    <button type="submit" class="send-result" id="submit-result">Submit</button>
+
+    <div id="message-about-result"></div>
+</section>
+
+<div id="register" class="register-modal modal">
+
+    <div class="user-form">
+        <div class="register-title">Register<br></div>
+
+        <div class="name">
+            <label>Name:</label>
+            <br>
+            <input type="text" name="your name*" id="name" placeholder="name*" required>
+            <br>
+        </div>
+        <div class="lastname">
+            <label>Last name:</label>
+            <br>
+            <input type="text" name="lastname" id="lastName" placeholder="last name*" required>
+        </div>
+        <div class="submit-button">
+            <input type="submit" value="Start" id="save">
+        </div>
+    </div>
+
+    <table id="winner-table" class="winner_results"></table>
+
+    <div class="submit-button new-game" id="new-game">
+        <input type="submit" value="Start" id="game">
+    </div>
+</div>
+
+<div class="game-container">
+    <div class="gameLocation">
+        <div class="health">
+            <div class="health-hero">
+                <div class="hero-name" id="heroName"></div>
+                <div class="hero-health-value" id="heroHealth"></div>
+                <progress id="hero"></progress>
+            </div>
+            <div class="game start" id="start">
+                <input type="submit" value=" Choose spell" id="save">
+            </div>
+            <div class="health-rival">
+                <div class="rival-name" id="zombieName"></div>
+                <div class="rival-health-value" id="zombieHealth"></div>
+                <progress id="zombie"></progress>
+            </div>
+
+        </div>
+        <div id="gameField" class="game-field"></div>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript" src="dist/build.js"></script>
+
+</html>

@@ -1,7 +1,17 @@
 <section class="mathTask modal" id="mathModal">
+    <dis id="description"></dis>
+
+    <div class="play-task" id="play-task">
+      <div>  Play</div>
+        <div class="play-button" id="play-button"></div>
+    </div>
+
+
     <div class="acquisition" id = "question">
         <div id="acquisition"></div>
-        <div class = "input-answer" id = "input"> = <input type="text" id="result" class="result"><br></div>
+        <div class = "input-answer" id = "input"> <input type="text" id="result" class="result" name="answer" required><br></div>
     </div>
     <button type="submit" class="send-result" id="submit-result">Submit</button>
+
+    <div id="final-result"></div>
 </section>

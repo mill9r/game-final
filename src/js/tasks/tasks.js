@@ -1,42 +1,80 @@
 import {getAnswer} from "./dragAndDrop";
 
 const _ = require('lodash');
-const signs = ["+", "-", "*", "%", "/"];
-export let result;
-export let answer;
 
-export const mathTask = () => {
-    document.getElementById('myModal').style.display = "none";
+let rightResult = [];
+let answer;
+let language;
+let word;
 
-    const firstNumber = _.random(0, 100);
-    const secondNumber = _.random(1, 20);
-    const sign = signs[_.random(0, 4)];
+export const taskDescription = ["Enter the result of the calculation. In the case of division round up result to one decimal place.",
+    "Translate the word to Russian",
+    "Guess the word and use drag and drop for ordering symbols ",
+    "Listen the word and write it",
+    "Listen the word and write translation"];
 
-    result = _.round(Number(eval(firstNumber + sign + secondNumber)), 1);
+export function getTaskDescription() {
+    return taskDescription;
+}
 
-    document.getElementById('acquisition').innerHTML = firstNumber + " " + sign + " " + secondNumber;
-    document.getElementById('mathModal').style.display = "inherit";
+export const checkResult = () => {
+    let answerResult;
+    console.log(answer, rightResult);
+    const userAnswerField = document.getElementById('final-result');
+
+    if (answer == "") {
+        userAnswerField.innerHTML = "Please enter the answer!";
+        userAnswerField.style.color = "red";
+    }
+    else {
+        answerResult = Array.isArray(rightResult) ?
+            _.includes(rightResult, answer) :
+            answer == rightResult;
+
+        if (answerResult) {
+            userAnswerField.innerHTML = "RIGHT";
+            userAnswerField.style.color = "green";
+        } else {
+            userAnswerField.innerHTML = "WRONG";
+            userAnswerField.style.color = "red";
+        }
+        setTimeout(() => {
+            document.getElementById('mathModal').style.display = "none";
+        }, 1000)
+    }
+};
+
+export let setRightResult = (res) => {
+    rightResult = res;
+};
+
+export let setAnswer = (ans) => {
+    answer = _.toLower(ans);
+};
+
+export let setLanguage = (lang) => {
+    language = lang;
+};
+export let setWord = (w) => {
+    word = w;
+};
+
+document.getElementById("play-button").onclick = () => {
+    const msg = new SpeechSynthesisUtterance();
+    msg.volume = 1; // 0 to 1
+    msg.rate = 0.7; // 0.1 to 10
+    msg.pitch = 1.5; // 0 to 2
+    msg.text = word;
+    msg.lang = language;
+    speechSynthesis.speak(msg);
 };
 
 document.getElementById("submit-result").onclick = () => {
     console.log(document.getElementById("input").style.display);
     if (document.getElementById("input").style.display === "none") {
         getAnswer();
-    }else {
+    } else {
         answer = document.getElementById("result").value;
     }
     checkResult();
-};
-
-export const checkResult = () => {
-    console.log(answer , result);
-    console.log(answer == result);
-};
-
-export let setResult = (res) => {
-    result = res;
-};
-
-export let setAnswer = (answ) => {
-    answer = answ;
 };

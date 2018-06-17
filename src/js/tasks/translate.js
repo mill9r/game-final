@@ -1,9 +1,9 @@
-import {setRightResult} from "./tasks.js";
+import {setRightResult, setLanguage, setWord} from "./tasks.js";
 import {taskDescription} from "./tasks";
-const _ = require('lodash');
 
-export const translateTask = () => {
+export const listeningTranslateTask = () => {
     document.getElementById('myModal').style.display = "none";
+    document.getElementById('play-task').style.display = "flex";
     const start = () => {
         fetch('https://api.myjson.com/bins/yfmxi')
             .then(res => res.json())
@@ -21,7 +21,11 @@ const setTask = (response) => {
     });
     const index = _.random(0, map.size-1);
     let question = Array.from(map.keys())[index];
-    document.getElementById('acquisition').innerHTML = question;
-    document.getElementById('description').innerHTML = taskDescription[1];
-    setRightResult(map.get(question));
+    document.getElementById('description').innerHTML = taskDescription[4];
+
+
+    setRightResult(question);
+    setLanguage("ru-RU");
+    setWord(map.get(question));
 };
+

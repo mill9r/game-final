@@ -1,6 +1,10 @@
 body{
 background: antiquewhite;
 }
+.modal{
+    margin: auto;
+}
+
 .incantation{
     display: grid;
     background-image: url("../img/spell/background.png");
@@ -49,21 +53,41 @@ background: antiquewhite;
 }
 
 .mathTask{
+    font-size: 25px;
     display: none;
-    width: 500px;
+    padding: 30px;
+    width: 800px;
     height: 500px;
-    background: darkorange;
-    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    background: #fefefe;
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    z-index: 1;
 }
 .acquisition{
     display: flex;
     flex-direction: row;
 }
+#acquisition{
+    padding: 10px;
+}
+.input-answer{
+    padding: 10px;
+}
+
 .send-result{
-    display: block;
+    width: 80px;
+    height: 50px;
+    font-size: 20px;
 }
 .result{
-    width: 40px;
+    width: 60px;
+    height: 25px;
+}
+
+#description{
+    margin: 10px;
 }
 
 #sortable {
@@ -76,9 +100,8 @@ background: antiquewhite;
 #sortable li {
     margin: 0 3px 3px 3px;
     padding: 0.4em;
-    padding-left: 1.5em;
     font-size: 1.4em;
-    height: 18px;
+    border: solid;
 }
 #sortable li span {
     position: absolute;
@@ -88,4 +111,20 @@ background: antiquewhite;
     background: #cedc98;
     border: 1px solid #DDDDDD;
     color: #333333;
+}
+
+
+.play-task{
+    display: none;
+}
+.play-button {
+    font-size: 10px;
+    margin: 0 15px;
+    position: relative;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 2.5em 0 2.5em 5em;
+    border-color: transparent transparent transparent #000;
+    opacity: .75;
 }

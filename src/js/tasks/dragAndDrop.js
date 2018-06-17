@@ -1,4 +1,4 @@
-import { setAnswer, setResult} from "./tasks";
+import {setAnswer, setRightResult, taskDescription} from "./tasks";
 
 const _ = require('lodash');
 
@@ -6,14 +6,14 @@ export const dragAndDropTask = () => {
     document.getElementById('myModal').style.display = "none";
 
     const start = () => {
-        fetch('https://api.myjson.com/bins/1162u2')
+        fetch('https://api.myjson.com/bins/yfmxi')
             .then(res => res.json())
             .then(response => {
                 setTask(response)
             })
             .then(respon => {
                 document.getElementsByClassName('input-answer')[0].style.display = "none";
-                document.getElementById('mathModal').style.display = "inherit";
+                document.getElementById('mathModal').style.display = "grid";
             })
     };
     start();
@@ -29,9 +29,9 @@ const setTask = (response) => {
 
     console.log(question);
     let shuffleWord = _.shuffle(question);
+    document.getElementById('description').innerHTML = taskDescription[2];
     setDraggable(shuffleWord);
-
-    setResult(question);
+    setRightResult(question);
 };
 
 function setDraggable(wordArray) {
@@ -62,4 +62,4 @@ export function getAnswer() {
         answer = answer + answerElements[i].textContent;
     }
     setAnswer(answer);
-};
+}

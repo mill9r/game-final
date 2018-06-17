@@ -1,6 +1,8 @@
-import {mathTask} from "./tasks/tasks";
+import {mathTask} from "./tasks/math";
 import {translateTask} from "./tasks/dictionary";
 import {dragAndDropTask} from "./tasks/dragAndDrop";
+import {listeningTask} from "./tasks/listening";
+import {listeningTranslateTask} from "./tasks/translate";
 
 class Spell {
     constructor(elem) {
@@ -22,9 +24,11 @@ class Spell {
     }
 
     act4() {
+        listeningTask();
     }
 
     act5() {
+        listeningTranslateTask();
     }
 
     act6() {

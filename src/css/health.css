@@ -1,6 +1,6 @@
 .game-container {
     display: grid;
-    grid-template-columns: auto 1000px auto;
+    grid-template-columns: auto 1050px auto;
     grid-template-areas: '. game-location .';
 }
 
@@ -19,15 +19,19 @@
 .health {
     display: grid;
     grid-area: health;
-    grid-template-columns: auto 60px auto;
+    grid-template-columns: auto 150px auto;
     grid-template-rows: auto;
-    grid-template-areas: 'hero-health . rival-health';
+    grid-template-areas: 'hero-health spell rival-health';
+}
+
+.game {
+    grid-area: spell;
 }
 
 .health-hero {
     display: grid;
     grid-area: hero-health;
-    grid-template-columns: 276px 46px 138px;
+    grid-template-columns: 276px 46px 120px;
     grid-template-rows: auto auto;
     grid-template-areas: ' hero-name hero-health-value .' 'hero-health-progress . .';
 }
@@ -49,7 +53,7 @@
 .health-rival {
     display: grid;
     grid-area: rival-health;
-    grid-template-columns: 138px 46px 276px;
+    grid-template-columns: 120px 46px 276px;
     grid-template-rows: auto auto;
     grid-template-areas: '. rival-health-value rival-name' '. . rival-health-progress';
 }

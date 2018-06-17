@@ -2,13 +2,18 @@ import {Spell} from "./spell";
 import {userResults} from "./gameLogic";
 
 document.getElementById('start').onclick = () => {
-    document.getElementById("myModal").style.display = "grid";
-    let sp = new Spell(document.getElementById("myModal"));
+    const modal = document.getElementById("myModal");
+    if ((modal.style.display == "" || modal.style.display == "none") && (document.getElementById("taskModal").style.display == ""
+        || document.getElementById("taskModal").style.display == 'none')) {
+        modal.style.display = "grid";
+        new Spell(document.getElementById("myModal"));
+    }
 };
-
+let userName;
+let userLastName;
+let userScore = 0;
 document.getElementById('save').onclick = () => {
-    let userName;
-    let userLastName;
+
     userName = document.getElementById('name').value;
     userLastName = document.getElementById('lastName').value;
     if (userName == "") {
@@ -19,8 +24,9 @@ document.getElementById('save').onclick = () => {
         let person = [{'name': userName, 'lastName': userLastName}];
         localStorage.setItem('person', JSON.stringify(person));
         document.getElementById('register').style.display = 'none';
+
+        startGame(userName);
     }
-    userResults(userName, userLastName);
 };
 
 
@@ -59,8 +65,8 @@ const personsPosition = {
     'zombie': [840, 460]
 };
 
-const zombieNameAdj = ['ugly', 'terrible', 'anger', 'mad', 'unlucky'];
-const zombieNameType = ['dead', 'undead', 'ork', 'zombie', 'torn to pieces'];
+const zombieNameAdj = ['Ugly', 'Terrible', 'Anger', 'Mad', 'Unlucky'];
+const zombieNameType = ['Dead', 'Undead', 'Ork', 'Zombie', 'Torn to pieces'];
 const zombieNameList = ['Tom', 'Jack', 'Max', 'John', 'Sam'];
 
 const startHealth = 100;
@@ -112,27 +118,32 @@ const attackType = {
     'zombie': ['zombieVertical', 'zombieHorizontal']
 };
 
-export const creatHero = () => {
+let zombieTimer;
+let heroTimer;
+
+export const createHero = () => {
     const hero = ['leftArm', 'legs', 'torso', 'weapon', 'rightArm', 'head', 'hair',];
     const heroEyes = {'xPos': 59, 'yPos': 25};
     const person = new SketchedObject(hero, 0, 0, 'img');
     person.set(personsPosition['hero'][0], personsPosition['hero'][1]);
     const position = [[40, 8], [0, 50], [0, 0], [65, -57], [-12, -3], [0, -80], [-28, -96]];
     const clearHeroArea = [71, 360, 165, 180];
-    setInterval(redrawCharacter.bind(null, person, position, ctx, clearHeroArea, heroEyes), milliseconds / fps);
+    heroTimer = setInterval(redrawCharacter.bind(null, person, position, ctx, clearHeroArea, heroEyes), milliseconds / fps);
 };
 
 
 export const createZombie = () => {
+    fillZombieLive(startHealth, zombieNameAdj, zombieNameType, zombieNameList);
     const zombiePosition = [[-40, 8], [-25, 50], [0, 0], [-1, 2], [-78, -75], [-30, -80]];
     const clearZombieArea = [750, 360, 150, 180];
     const zombiePerson = new ZombieFactory();
     const zombie = zombiePerson.create();
     zombie.set(personsPosition['zombie'][0], personsPosition['zombie'][1]);
-    setInterval(redrawCharacter.bind(null, zombie, zombiePosition, ctx, clearZombieArea), milliseconds / fps);
+    const timer = setInterval(redrawCharacter.bind(null, zombie, zombiePosition, ctx, clearZombieArea), milliseconds / fps);
+    return timer;
 };
 
-export const makeAttack = (ctx, action, spell) => {
+const makeAttack = (ctx, action, spell) => {
     const waitTime = 2500;
     const person = action === true ? 'hero' : 'zombie';
     const fabric = new MagicFactory();
@@ -147,57 +158,33 @@ export const makeAttack = (ctx, action, spell) => {
 
     const health = document.getElementById(revertPerson(person));
     const width = health.style.width.replace('%', '');
-    setTimeout(subtractHealth.bind(null, health, Number(width), 10, revertPerson(person)), waitTime)
+    setTimeout(subtractHealth.bind(null, health, Number(width), 10, revertPerson(person)), waitTime);
 };
-
 
 export const startGame = (name) => {
+    clearInterval(heroTimer);
+    clearInterval(zombieTimer);
     fillHeroLive(name, startHealth);
-    creatHero();
-
+    createHero();
+    zombieTimer = createZombie();
+    setInterval(createNewZombie, 1000);
 };
-
 
 
 export const createNewZombie = () => {
-    if (getCurrentHealth('zombie') === 0) {
-        fillZombieLive(startHealth, zombieNameAdj, zombieNameType, zombieNameList);
-        createZombie();
+    console.log(getCurrentHealth('hero'), getCurrentHealth('zombie'));
+    if (getCurrentHealth('hero') == 0) {
+        userResults(userName, userLastName, userScore);
+        userScore = 0;
+    } else if (getCurrentHealth('zombie') == 0) {
+        userScore++;
+        clearInterval(zombieTimer);
+        zombieTimer = createZombie();
     }
 };
 
-setInterval(createNewZombie,1000);
 
-startGame('John');
-makeAttack(ctx, false, spells[getRandomInt(4)]);
-
-
-
-
-// const cloud = ['cloud'];
-// const cloudObj = new SketchedObject(cloud, 620, 220, 'img/magic');
-// setInterval(drawMagic.bind(null, cloudObj, ctx), milliseconds / magicFps);
-//
-// const lightning = ['lightning', 'lightning1'];
-// const light = new SketchedObject(lightning, 680, 300, 'img/magic');
-// setInterval(drawMagic.bind(null, light, ctx), milliseconds / magicFps);
-//
-//
-// const zombieCloud = ['cloud'];
-// const zombieCloudObj = new SketchedObject(cloud, 275, 220, 'img/magic_zombie');
-// setInterval(drawMagic.bind(null, zombieCloudObj, ctx), milliseconds / fps);
-//
-// const zombieLightning = ['lightning', 'lightning1'];
-// const zombieLight = new SketchedObject(lightning, 310, 301, 'img/magic_zombie');
-// setInterval(drawMagic.bind(null, zombieLight, ctx), milliseconds / fps);
-
-
-
-// const context = gameContainer.getContext('2d');
-//
-// gameContainer.addEventListener('mousemove', function (evt) {
-//     const mousePos = getMousePos(gameContainer, evt);
-//     const message = 'Mouse position: x = ' + Math.round(mousePos.x) + ', y = ' + Math.round(mousePos.y);
-//     writeMessage(gameContainer, message);
-// }, false);
+export const attack = (result) => {
+    makeAttack(ctx, result, spells[getRandomInt(4)]);
+};
 

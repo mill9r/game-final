@@ -75,7 +75,7 @@ export const animateObject = (ctx, obj, dx, dy, width, height, subtract, explosi
     if (checkResult(movementPoint, movementToPosition, direction)) {
         requestAnimationFrame(animateObject.bind(null, ctx, obj, dx, dy, width, height, subtract, explosion, incr, moveAxe, movementToPosition, direction))  // loop
     } else {
-        ctx.clearRect(dx, dy, width + subtract, height + subtract);
+        ctx.clearRect(dx-subtract, dy-subtract, width + subtract, height + subtract);
         makeExplosion(ctx, explosion, dx, dy, explosion.object[0][0].width, explosion.object[0][0].height)
     }
     return true;
@@ -113,7 +113,7 @@ const createImage = (ctx, img, dx, dy, width, height, time) => {
 };
 
 export const clearCanvas = (ctx, xPos, yPos, width, height) => {
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = 'antiquewhite';
     ctx.fillRect(xPos, yPos, width, height);
 };
 

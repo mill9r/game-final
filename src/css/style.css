@@ -16,8 +16,13 @@ background: antiquewhite;
 }
 
 .incantation{
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.incantation{
     display: none;
-    background-image: url("../img/spell/background.png");
+    background-image: url("../img/spell/background2.png");
     background-size: 100% ;
     border-radius: 50%;
     width: 500px;
@@ -159,7 +164,7 @@ background: antiquewhite;
     font-size: 20px;
     color: burlywood;
 }
-input, select {
+.user-form input, select {
     width: 200px;
     height: 36px;
     border: 1px solid antiquewhite;
@@ -176,4 +181,8 @@ input[type=submit] {
     font-size: 20px;
     color: #fff;
     margin: 0 auto;
+}
+
+.new-game{
+    display: none;
 }

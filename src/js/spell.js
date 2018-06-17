@@ -3,6 +3,7 @@ import {translateTask} from "./tasks/dictionary";
 import {dragAndDropTask} from "./tasks/dragAndDrop";
 import {listeningTask} from "./tasks/listening";
 import {listeningTranslateTask} from "./tasks/translate";
+import {listeningAndTranslateTask} from "./tasks/listenAndTranslate";
 
 class Spell {
     constructor(elem) {
@@ -32,6 +33,7 @@ class Spell {
     }
 
     act6() {
+        listeningAndTranslateTask();
     }
 
     onClick(event) {

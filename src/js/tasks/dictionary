@@ -13,7 +13,7 @@ export const translateTask = () => {
             })
             .then(respon => {
                 document.getElementById('taskModal').style.display = "grid";
-                document.getElementById('result').style.display = "grid";
+                document.getElementById('input').style.display = "grid";
             })
     };
     start();

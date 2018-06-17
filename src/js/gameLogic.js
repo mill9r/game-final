@@ -1,16 +1,16 @@
-
 //winner table
+import {startGame} from "./index";
+
 let winnResult = [];
 let winnTable = document.getElementById('winner-table');
-export const userResults = (userName, userLastName) => {
+export const userResults = (userName, userLastName, userScore) => {
     document.getElementById('register').style.display = 'grid';
     document.getElementsByClassName('user-form')[0].style.display = 'none';
 
     if (document.getElementById('winner-table').childNodes.length >= 1) {
         clearDivContent('winner-table');
     }
-    //todo
-    setResult(1);
+    setResult(userScore);
     localStorage.setItem('result', JSON.stringify(winnResult));
 
     const headRow = document.createElement('tr');
@@ -40,39 +40,42 @@ export const userResults = (userName, userLastName) => {
 
         cell1.innerHTML = "" + i;
         cell2.innerHTML = item.person[0].name + " " + item.person[0].lastName;
-        cell4.innerHTML = 1;
+        cell4.innerHTML = item.score;
 
     });
     winnTable.style.display = "grid";
+    document.getElementById('new-game').style.display = 'grid';
+
 };
 
-function setResult(userResult) {
+function setResult(userScore) {
     if (JSON.parse(localStorage.getItem("result"))) {
         winnResult = JSON.parse(localStorage.getItem("result"));
     }
     if (winnResult.length < 10) {
-        formDate();
+        formDate(userScore);
     }
     else {
         winnResult = winnResult.sort(function (a, b) {
-            return (a.score > b.score) ? 1 : ((b.score > a.score) ? -1 : 0);
+            return (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0);
         });
-        if (winnResult[9].score > userResult.score) {
+        if (winnResult[9].score < userScore) {
             winnResult.pop();
-            formDate();
+            formDate(userScore);
         }
     }
     winnResult = winnResult.sort(function (a, b) {
-        return (a.score > b.score) ? 1 : ((b.score > a.score) ? -1 : 0);
+        return (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0);
     });
 }
-function formDate() {
+
+function formDate(userScore) {
     winnResult.push({
         'person': JSON.parse(localStorage.getItem("person")),
-        //TODO
-        'score': 1,
+        'score': userScore,
     });
 }
+
 const clearDivContent = (idName) => {
     let div = document.getElementById(idName);
     clearInner(div);
@@ -88,4 +91,10 @@ const clear = (node) => {
         clear(node.firstChild);
     }
     node.parentNode.removeChild(node);
+};
+
+document.getElementById("new-game").onclick = () => {
+    winnTable.style.display = 'none';
+    document.getElementById('register').style.display = 'none';
+    startGame((JSON.parse(localStorage.getItem("person")))[0].name);
 };

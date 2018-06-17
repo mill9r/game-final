@@ -1,5 +1,6 @@
 import {setRightResult} from "./tasks.js";
 import {taskDescription} from "./tasks";
+
 const _ = require('lodash');
 
 export const translateTask = () => {
@@ -8,8 +9,12 @@ export const translateTask = () => {
         fetch('https://api.myjson.com/bins/yfmxi')
             .then(res => res.json())
             .then(response => {
-                setTask(response)})
-            .then( respon => {document.getElementById('mathModal').style.display = "grid"})
+                setTask(response)
+            })
+            .then(respon => {
+                document.getElementById('taskModal').style.display = "grid";
+                document.getElementById('result').style.display = "grid";
+            })
     };
     start();
 };
@@ -19,9 +24,9 @@ const setTask = (response) => {
     Object.keys(response).forEach(key => {
         map.set(key, response[key]);
     });
-    const index = _.random(0, map.size-1);
+    const index = _.random(0, map.size - 1);
     let question = Array.from(map.keys())[index];
-    document.getElementById('acquisition').innerHTML = question;
+    document.getElementById('equation').innerHTML = question;
     document.getElementById('description').innerHTML = taskDescription[1];
     setRightResult(map.get(question));
 };

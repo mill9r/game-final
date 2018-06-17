@@ -13,7 +13,7 @@ export const dragAndDropTask = () => {
             })
             .then(respon => {
                 document.getElementsByClassName('input-answer')[0].style.display = "none";
-                document.getElementById('mathModal').style.display = "grid";
+                document.getElementById('taskModal').style.display = "grid";
             })
     };
     start();
@@ -62,4 +62,5 @@ export function getAnswer() {
         answer = answer + answerElements[i].textContent;
     }
     setAnswer(answer);
+    document.getElementById('question').removeChild(document.getElementById('sortable'));
 }

@@ -1,3 +1,29 @@
+import {Spell} from "./spell";
+import {userResults} from "./gameLogic";
+
+document.getElementById('start').onclick = () => {
+    document.getElementById("myModal").style.display = "grid";
+    let sp = new Spell(document.getElementById("myModal"));
+};
+
+document.getElementById('save').onclick = () => {
+    let userName;
+    let userLastName;
+    userName = document.getElementById('name').value;
+    userLastName = document.getElementById('lastName').value;
+    if (userName == "") {
+        document.getElementById('name').style.borderColor = 'red';
+    } else if (userLastName == "") {
+        document.getElementById('lastName').style.borderColor = 'red';
+    } else {
+        let person = [{'name': userName, 'lastName': userLastName}];
+        localStorage.setItem('person', JSON.stringify(person));
+        document.getElementById('register').style.display = 'none';
+    }
+    userResults(userName, userLastName);
+};
+
+
 import {SketchedObject} from "./sketchedObject";
 import {
     redrawCharacter,

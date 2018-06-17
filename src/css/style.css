@@ -3,10 +3,20 @@ background: antiquewhite;
 }
 .modal{
     margin: auto;
+    z-index: 1;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fefefe;
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    z-index: 1;
+
 }
 
 .incantation{
-    display: grid;
+    display: none;
     background-image: url("../img/spell/background.png");
     background-size: 100% ;
     border-radius: 50%;
@@ -52,7 +62,7 @@ background: antiquewhite;
     text-align: center;
 }
 
-.mathTask{
+.task{
     font-size: 25px;
     display: none;
     padding: 30px;
@@ -65,11 +75,11 @@ background: antiquewhite;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
     z-index: 1;
 }
-.acquisition{
+.equation{
     display: flex;
     flex-direction: row;
 }
-#acquisition{
+#equation{
     padding: 10px;
 }
 .input-answer{
@@ -86,7 +96,7 @@ background: antiquewhite;
     height: 25px;
 }
 
-#description{
+.task-description{
     margin: 10px;
 }
 
@@ -127,4 +137,43 @@ background: antiquewhite;
     border-width: 2.5em 0 2.5em 5em;
     border-color: transparent transparent transparent #000;
     opacity: .75;
+}
+
+/*register */
+.register-modal{
+    display: flex;
+    background: white;
+    width: 400px;
+    height: 350px;
+    justify-content: center;
+
+}
+.register-title{
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.user-form {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 20px;
+    color: burlywood;
+}
+input, select {
+    width: 200px;
+    height: 36px;
+    border: 1px solid antiquewhite;
+    margin: 10px 0px 20px 1px;
+    font-size: 16px;
+}
+
+::placeholder {
+    padding: 15px;
+}
+
+input[type=submit] {
+    background-color: burlywood;
+    font-size: 20px;
+    color: #fff;
+    margin: 0 auto;
 }

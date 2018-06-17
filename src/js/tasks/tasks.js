@@ -7,7 +7,7 @@ let answer;
 let language;
 let word;
 
-export const taskDescription = ["Enter the result of the calculation. In the case of division round up result to one decimal place.",
+export const taskDescription = ["Enter the result of the calculation. In case of division round up result to one decimal place.",
     "Translate the word to Russian",
     "Guess the word and use drag and drop for ordering symbols ",
     "Listen the word and write it",
@@ -20,7 +20,7 @@ export function getTaskDescription() {
 export const checkResult = () => {
     let answerResult;
     console.log(answer, rightResult);
-    const userAnswerField = document.getElementById('final-result');
+    const userAnswerField = document.getElementById('message-about-result');
 
     if (answer == "") {
         userAnswerField.innerHTML = "Please enter the answer!";
@@ -39,8 +39,13 @@ export const checkResult = () => {
             userAnswerField.style.color = "red";
         }
         setTimeout(() => {
-            document.getElementById('mathModal').style.display = "none";
+            document.getElementById('result').value="";
+            document.getElementById('play').style.display = "none";
+            document.getElementById('equation').innerHTML="";
+            document.getElementById('taskModal').style.display = "none";
+            userAnswerField.innerHTML = "";
         }, 1000)
+
     }
 };
 
@@ -70,7 +75,6 @@ document.getElementById("play-button").onclick = () => {
 };
 
 document.getElementById("submit-result").onclick = () => {
-    console.log(document.getElementById("input").style.display);
     if (document.getElementById("input").style.display === "none") {
         getAnswer();
     } else {

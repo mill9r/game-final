@@ -9,9 +9,10 @@ export const mathTask = () => {
     const sign = signs[_.random(0, signs.length-1)];
 
     setRightResult( _.round(Number(eval(firstNumber + sign + secondNumber)), 1));
-    document.getElementById('acquisition').innerHTML = firstNumber + " " + sign + " " + secondNumber+ " = ";
+    document.getElementById('equation').innerHTML = firstNumber + " " + sign + " " + secondNumber+ " = ";
     document.getElementById('description').innerHTML =( getTaskDescription())[0];
 
-    document.getElementById('mathModal').style.display = "grid";
+    document.getElementById('result').style.display = "grid";
+    document.getElementById('taskModal').style.display = "grid";
 };
 

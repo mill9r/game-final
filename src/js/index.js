@@ -1,129 +1,155 @@
-// import {Character} from "./character";
-// import {redraw, addCanvas} from "./utils";
-import {Spell} from  "./spell";
+import {SketchedObject} from "./sketchedObject";
+import {
+    redrawCharacter,
+    addCanvas,
+    clearCanvas,
+    isCanvasSupported,
+    getRandomInt,
+    drawMagic,
+    writeMessage,
+    getMousePos,
+    drawMagicSequence,
+    animateObject, makeExplosion, executeInSequence
+} from "./utils";
+import {MagicFactory} from "./magicFactory";
+import {ZombieFactory} from "./zombieFactory";
 
-let sp = new Spell( document.getElementById("myModal"));
+const _ = require('lodash');
+
+const fps = 30;
+const fieldWidth = 1000;
+const fieldHeight = 800;
+const milliseconds = 1000;
+const id = 'gameCanvas';
+const gameField = 'gameField';
+const gameContainer = addCanvas(id, fieldWidth, fieldHeight, gameField);
+const ctx = gameContainer.getContext('2d');
+const personsPosition = {
+    'hero': [100, 460],
+    'rival': [840, 460]
+};
+
+const magic = {
+    'heroVertical': {
+        'xPos': 830,
+        'yPos': 30,
+        'axis': 'dy',
+        'increment': 5,
+        'clearArea': 5,
+        'stop': 290,
+        'direction': 'positive'
+    },
+    'zombieVertical': {
+        'xPos': 100,
+        'yPos': 30,
+        'axis': 'dy',
+        'increment': 5,
+        'clearArea': 5,
+        'stop': 290,
+        'direction': 'positive'
+    },
+    'heroHorizontal': {
+        'xPos': 190,
+        'yPos': 390,
+        'axis': 'dx',
+        'increment': 5,
+        'clearArea': 5,
+        'stop': 750,
+        'direction': 'positive'
+    },
+    'zombieHorizontal': {
+        'xPos': 750,
+        'yPos': 390,
+        'axis': 'dx',
+        'increment': -5,
+        'clearArea': 5,
+        'stop': 190,
+        'direction': 'negative'
+    }
+};
+
+const attackType = {
+    'hero': ['heroVertical', 'heroHorizontal'],
+    'zombie': ['zombieVertical', 'zombieHorizontal']
+};
+
+export const creatHero = () => {
+    const hero = ['leftArm', 'legs', 'torso', 'weapon', 'rightArm', 'head', 'hair',];
+    const heroEyes = {'xPos': 59, 'yPos': 25};
+    const person = new SketchedObject(hero, 100, 460, 'img');
+    const position = [[40, 8], [0, 50], [0, 0], [65, -57], [-12, -3], [0, -80], [-28, -96]];
+    const clearHeroArea = [71, 360, 165, 180];
+    setInterval(redrawCharacter.bind(null, person, position, ctx, clearHeroArea, heroEyes), milliseconds / fps);
+};
+
+creatHero();
+
+export const createZombie = () => {
+    const zombiePosition = [[-40, 8], [-25, 50], [0, 0], [-1, 2], [-78, -75], [-30, -80]];
+    const clearZombieArea = [750, 360, 150, 180];
+    const zombiePerson = new ZombieFactory();
+    const zombie = zombiePerson.create();
+    zombie.set(840, 460);
+    setInterval(redrawCharacter.bind(null, zombie, zombiePosition, ctx, clearZombieArea), milliseconds / fps);
+};
+
+createZombie();
 
 
-// const fps = 30;
-// const milliseconds = 1000;
-// const hero = ['leftArm', 'legs', 'torso', 'rightArm', 'head', 'hair'];
-// const heroEyes = {'left':47,'right':68};
-// const person = new Character(hero, 245, 185, 'img');
-// const position = [[40, -42], [0, 0], [0, -50], [-15, -42], [-10, -125], [-37, -138]];
-// const gameField = 'gameField';
-// const heroId = 'canvasHero';
-// const heroContainer = addCanvas(heroId, 490, 270, gameField);
-// setInterval(redraw.bind(null, person, position, heroContainer,heroEyes), milliseconds / fps);
-// //TODO try to use class
-// // person.set('hair',redraw, [person, position,'canvasHero', 490, 270,'canvasDiv'],milliseconds / fps);
+export const makeAttack = (ctx, person, spell) => {
+    const fabric = new MagicFactory();
+    const attack = fabric.create(spell);
+    const attackAxis = attackType[person][getRandomInt(2)];
+    const paramsForAnimateObject = magic[attackAxis];
+    // const promise = new Promise(
+    animateObject(ctx, attack[0], paramsForAnimateObject['xPos'], paramsForAnimateObject['yPos'],
+        attack[0].object[0][0].width, attack[0].object[0][0].height, paramsForAnimateObject['clearArea'],
+        attack[1], paramsForAnimateObject['increment'], paramsForAnimateObject['axis'], paramsForAnimateObject['stop'],
+        paramsForAnimateObject['direction'])
+    // );
+    // promise.then(() => console.log('After execution', res));
+};
+
+
+makeAttack(ctx, 'zombie', 'stone');
+
+//health
+// const bar = document.getElementById('elem');
+// bar.style.width = 100 + '%';
+// let health = 100;
+// elem.onclick = function () {
+//     health -= 10;
+//     elem.style.width = health + '%';
+// };
+
+
+// animateObject(ctx, stoneObj, 100, 30, stoneObj.object[0][0].width, stoneObj.object[0][0].height, 5, stoneFallObj, 4, 'dy', 290);
+
+
+// const cloud = ['cloud'];
+// const cloudObj = new SketchedObject(cloud, 620, 220, 'img/magic');
+// setInterval(drawMagic.bind(null, cloudObj, ctx), milliseconds / magicFps);
 //
-// const zombiePosition = [[-10,-42],[0,0],[25,-50],[20,-42],[-10,-125]];
-// const zombie = ['leftArm', 'legs', 'torso', 'rightArm', 'head'];
-// const zombieEyes = {'left':10,'right':68};
-// const zombiePerson = new Character(zombie, 245, 185,'img/zombie');
-// const zombieId = 'canvasZombie';
-// const zombieContainer = addCanvas(zombieId, 490, 270, gameField);
-// setInterval(redraw.bind(null, zombiePerson, zombiePosition, zombieContainer,zombieEyes), milliseconds / fps);
-// // zombiePerson.set('head',redraw(zombiePerson,zombiePosition,'canvasZombie',490,270,'canvasDiv'),1000/fps);
+// const lightning = ['lightning', 'lightning1'];
+// const light = new SketchedObject(lightning, 680, 300, 'img/magic');
+// setInterval(drawMagic.bind(null, light, ctx), milliseconds / magicFps);
 //
 //
-// var Ball = function() {
+// const zombieCloud = ['cloud'];
+// const zombieCloudObj = new SketchedObject(cloud, 275, 220, 'img/magic_zombie');
+// setInterval(drawMagic.bind(null, zombieCloudObj, ctx), milliseconds / fps);
 //
-//     var x = 0,
-//         y = 0,
-//         speed = 0,
-//         direction = 1,
-//         rollTimer,
-//         dirty = false,
-//         diameter = 20,
-//         color = "#DD3333",
-//         highlightColor = "#fa6565";
-//
-//     rollTimer = setInterval(updateRoll, 1000/25);
-//
-//     function roll(pSpeed, pDirection){
-//         speed = pSpeed;
-//         if(pDirection){
-//             direction = pDirection;
-//         }
-//
-//     }
-//     function stop() {
-//         speed = 0;
-//     }
-//     function updateRoll() {
-//         x += direction * speed;
-//     }
-//     function draw(context) {
-//
-//         var centerX = x,
-//             centerY = y + (diameter + 10)/2 - 2,
-//             width = (diameter + 30),
-//             height = 6;
-//
-//         context.beginPath();
-//         context.moveTo(centerX, centerY);
-//         context.bezierCurveTo(centerX-width/2,centerY-height/2,
-//             centerX-width/2,centerY+height/2,
-//             centerX,centerY+height/2);
-//         context.bezierCurveTo(centerX+width/2,centerY+height/2,
-//             centerX+width/2,centerY-height/2,
-//             centerX,centerY-height/2);
-//         context.fillStyle = "#000000";
-//         context.fill();
-//         context.closePath();
-//
-//         context.beginPath();
-//         context.moveTo(x, y - (diameter + 10)/2);
-//         context.arc(x,y,(diameter + 10)/2,0,2*Math.PI,false);
-//         context.fillStyle = "#000000";
-//         context.fill();
-//         context.closePath();
-//
-//         context.beginPath();
-//         context.moveTo(x, y - diameter/2);
-//         context.arc(x,y,diameter/2,0,2*Math.PI,false);
-//         context.fillStyle = color;
-//         context.fill();
-//         context.closePath();
-//
-//         centerX = x + 3;
-//         centerY = y - 3;
-//         context.beginPath();
-//         context.moveTo(centerX, centerY);
-//         context.arc(centerX,centerY,diameter/3/2,0,2*Math.PI,false);
-//         context.fillStyle = highlightColor;
-//         context.fill();
-//         context.closePath();
-//     }
-//     function getX(){
-//         return x;
-//     }
-//     function setX(pX){
-//         x = pX;
-//     }
-//     function getY(){
-//         return y;
-//     }
-//     function setY(pY){
-//         y = pY;
-//     }
-//     return {
-//         getX:getX,
-//         setX:setX,
-//         getY:getY,
-//         setY:setY,
-//         roll:roll,
-//         draw:draw,
-//         stop:stop
-//     };
-// }
-//
-// var canvasWidth = 490, canvasHeight = 220;
-// var speed = 15;
-// var ball = new Ball();
-// ball.setX(canvasWidth);
-// ball.setY(200);
-// ball.roll(speed, -1);
-// displayList.push(ball);
+// const zombieLightning = ['lightning', 'lightning1'];
+// const zombieLight = new SketchedObject(lightning, 310, 301, 'img/magic_zombie');
+// setInterval(drawMagic.bind(null, zombieLight, ctx), milliseconds / fps);
+
+
+//  TODO for  debug
+const context = gameContainer.getContext('2d');
+
+gameContainer.addEventListener('mousemove', function (evt) {
+    const mousePos = getMousePos(gameContainer, evt);
+    const message = 'Mouse position: x = ' + Math.round(mousePos.x) + ', y = ' + Math.round(mousePos.y);
+    writeMessage(gameContainer, message);
+}, false);
+

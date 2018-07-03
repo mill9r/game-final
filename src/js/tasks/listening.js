@@ -15,7 +15,7 @@ export const listeningTask = () => {
                 document.getElementById('input').style.display = "grid";
             })
     };
-    startHealth();
+    start();
 };
 
 const setTask = (response) => {

@@ -1,0 +1,1 @@
+export const TASK_URL = 'https://api.myjson.com/bins/yfmxi';

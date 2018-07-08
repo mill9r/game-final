@@ -1,6 +1,6 @@
-import {getAnswer} from "./dragAndDrop";
-import {attack} from "../index";
-import {getCurrentHealth} from "../utils";
+import {getAnswer} from "./drag-and-drop/dragAndDrop";
+import {attack} from "../../app";
+import {displayStyleForId} from "./utils/util";
 
 const _ = require('lodash');
 
@@ -8,6 +8,16 @@ let rightResult = [];
 let answer;
 let language;
 let word;
+
+const wrongUserAnswer = 'WRONG';
+const wrongUserAnswerColor = 'red';
+const rightUserAnswer = 'RIGHT';
+const rightUserAnswerColor = 'green';
+const msgForEmptyField = 'Please enter the answer!';
+const interval = 100;
+const VOLUME = 1;
+const RATE = 0.7;
+const PITCH = 1.5;
 
 export const taskDescription = ["Enter the result of the calculation. In case of division round up result to one decimal place.",
     "Translate the word to Russian",
@@ -25,28 +35,26 @@ export const checkResult = () => {
     const userAnswerField = document.getElementById('message-about-result');
 
     if (answer == "") {
-        userAnswerField.innerHTML = "Please enter the answer!";
-        userAnswerField.style.color = "red";
+        userAnswerField.innerHTML = msgForEmptyField;
+        userAnswerField.style.color = wrongUserAnswerColor;
     }
     else {
         answerResult = Array.isArray(rightResult) ?
             _.includes(rightResult, answer) :
             answer == rightResult;
-
         if (answerResult) {
-            userAnswerField.innerHTML = "RIGHT";
-            userAnswerField.style.color = "green";
+            userAnswerField.innerHTML = rightUserAnswer;
+            userAnswerField.style.color = rightUserAnswerColor;
         } else {
-            userAnswerField.innerHTML = "WRONG";
-            userAnswerField.style.color = "red";
+            userAnswerField.innerHTML = wrongUserAnswer;
+            userAnswerField.style.color = wrongUserAnswerColor;
         }
         setTimeout(() => {
             document.getElementById('result').value = "";
-            document.getElementById('play').style.display = "none";
+            displayStyleForId(['taskModal', 'play'], ['none', 'none']);
             document.getElementById('equation').innerHTML = "";
-            document.getElementById('taskModal').style.display = "none";
             userAnswerField.innerHTML = "";
-        }, 100);
+        }, interval);
 
         attack(answerResult);
     }
@@ -69,9 +77,9 @@ export let setWord = (w) => {
 
 document.getElementById("play-button").onclick = () => {
     const msg = new SpeechSynthesisUtterance();
-    msg.volume = 1; // 0 to 1
-    msg.rate = 0.7; // 0.1 to 10
-    msg.pitch = 1.5; // 0 to 2
+    msg.volume = VOLUME;
+    msg.rate = RATE;
+    msg.pitch = PITCH;
     msg.text = word;
     msg.lang = language;
     speechSynthesis.speak(msg);

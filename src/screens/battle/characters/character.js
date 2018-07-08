@@ -3,23 +3,23 @@ import {SketchedObject} from "./sketchedObject";
 
 class Character {
     constructor(gameHeroNameId, gameHeroId, gameHeroHealthId) {
-        this.gameZombieNameId = gameHeroNameId;
-        this.gameZombieId = gameHeroId;
-        this.gameZombieHealthId = gameHeroHealthId;
+        this.gameHeroNameId = gameHeroNameId;
+        this.gameHeroId = gameHeroId;
+        this.gameHeroHealthId = gameHeroHealthId;
         this.breathAmt = 0;
         this.breathDirection = 1;
     }
 
-    getZombieName() {
-        return this.gameZombieNameId;
+    getGameHeroNameId() {
+        return this.gameHeroNameId;
     }
 
-    getZombieId() {
-        return this.gameZombieId;
+    getGameHeroId() {
+        return this.gameHeroId;
     }
 
-    getZombieHealth() {
-        return this.gameZombieHealthId;
+    getGameHeroHealthId() {
+        return this.gameHeroHealthId;
     }
 
     getBreathAmt() {

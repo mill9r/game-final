@@ -1,25 +1,24 @@
-import {setAnswer, setRightResult, taskDescription} from "./tasks";
+import {setAnswer, setRightResult, taskDescription} from "../tasks";
+import {displayStyleForId} from "../utils/util";
 
 const _ = require('lodash');
 
-export const dragAndDropTask = () => {
-    document.getElementById('myModal').style.display = "none";
-
+export const dragAndDropTask = (taskNumber, TASK_URL) => {
+    displayStyleForId(['myModal'], ['none']);
     const start = () => {
-        fetch('https://api.myjson.com/bins/yfmxi')
+        fetch(TASK_URL)
             .then(res => res.json())
             .then(response => {
-                setTask(response)
+                setTask(response, taskNumber)
             })
             .then(respon => {
-                document.getElementById('input').style.display = "none";
-                document.getElementById('taskModal').style.display = "grid";
+                displayStyleForId(['taskModal', 'input'], ['grid', 'none']);
             })
     };
     start();
 };
 
-const setTask = (response) => {
+const setTask = (response, taskNumber) => {
     let map = new Map();
     Object.keys(response).forEach(key => {
         map.set(key, response[key]);
@@ -29,7 +28,7 @@ const setTask = (response) => {
 
     console.log(question);
     let shuffleWord = _.shuffle(question);
-    document.getElementById('description').innerHTML = taskDescription[2];
+    document.getElementById('description').innerHTML = taskDescription[taskNumber];
     setDraggable(shuffleWord);
     setRightResult(question);
 };

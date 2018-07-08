@@ -1,4 +1,4 @@
-import {loadImage} from "./utils";
+import {loadImage} from "../helper";
 
 class SketchedObject {
     constructor(objectParticles, charX, charY, path) {

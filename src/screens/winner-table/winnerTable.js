@@ -1,9 +1,12 @@
-//winner table
-import {startGame} from "./index";
+import {startGame} from "../../app";
+import {displayStyleForId} from "../../components/tasks/utils/util";
 
 let winnResult = [];
-let winnTable = document.getElementById('winner-table');
+
+const TABLE_HEADER = ['N', 'Name', 'Results'];
+
 export const userResults = (userName, userLastName, userScore) => {
+    const winnTable = document.getElementById('winner-table');
     document.getElementById('register').style.display = 'grid';
     document.getElementsByClassName('user-form')[0].style.display = 'none';
 
@@ -13,39 +16,41 @@ export const userResults = (userName, userLastName, userScore) => {
     setResult(userScore);
     localStorage.setItem('result', JSON.stringify(winnResult));
 
-    const headRow = document.createElement('tr');
-    const headCell1 = document.createElement('th');
-    const headCell2 = document.createElement('th');
-    const headCell4 = document.createElement('th');
-    headCell1.innerHTML = 'N';
-    headCell2.innerHTML = 'Name';
-    headCell4.innerHTML = 'Results';
-    headRow.appendChild(headCell1);
-    headRow.appendChild(headCell2);
-    headRow.appendChild(headCell4);
-    winnTable.appendChild(headRow);
-
-    let i = 0;
-    winnResult.forEach(item => {
-        i++;
-        const row = document.createElement('tr');
-
-        const cell1 = document.createElement('td');
-        const cell2 = document.createElement('td');
-        const cell4 = document.createElement('td');
-        winnTable.appendChild(row);
-        row.appendChild(cell1);
-        row.appendChild(cell2);
-        row.appendChild(cell4);
-
-        cell1.innerHTML = "" + i;
-        cell2.innerHTML = item.person[0].name + " " + item.person[0].lastName;
-        cell4.innerHTML = item.score;
+    createTableHeader(winnTable, TABLE_HEADER);
+    winnResult.forEach((item, i) => {
+        createTableRow(i, item, winnTable);
 
     });
     winnTable.style.display = "grid";
     document.getElementById('new-game').style.display = 'grid';
 
+};
+
+const createTableHeader = (tableElement, tableHeader) => {
+    const thead = document.createElement('thead');
+    const theadRow = document.createElement('tr');
+    tableHeader.forEach((elem) => {
+        const theadCell = document.createElement('td');
+        theadCell.innerHTML = elem;
+        theadRow.appendChild(theadCell);
+    });
+    thead.appendChild(theadRow);
+    tableElement.appendChild(thead);
+};
+
+const createTableRow = (position, item, table) => {
+    const row = document.createElement('tr');
+
+    const rank = document.createElement('td');
+    const userName = document.createElement('td');
+    const userScore = document.createElement('td');
+    table.appendChild(row);
+    row.appendChild(rank);
+    row.appendChild(userName);
+    row.appendChild(userScore);
+    rank.innerHTML = "" + position;
+    userName.innerHTML = item.person[0].name + " " + item.person[0].lastName;
+    userScore.innerHTML = item.score;
 };
 
 function setResult(userScore) {
@@ -94,6 +99,7 @@ const clear = (node) => {
 };
 
 document.getElementById("new-game").onclick = () => {
+    const winnTable = document.getElementById('winner-table');
     winnTable.style.display = 'none';
     document.getElementById('register').style.display = 'none';
     startGame((JSON.parse(localStorage.getItem("person")))[0].name);

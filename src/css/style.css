@@ -22,7 +22,7 @@ background: antiquewhite;
 
 .incantation{
     display: none;
-    background-image: url("../img/spell/background2.png");
+    background-image: url("../screens/images/spell/background2.png");
     background-size: 100% ;
     border-radius: 50%;
     width: 500px;

@@ -1,8 +1,8 @@
-import {SketchedObject} from "./sketchedObject";
+import {SketchedObject} from "../characters/sketchedObject";
 
 const START_X_POSITION = 0;
 const START_Y_POSITION = 0;
-const PATH_TO_FOLDER_WITH_MAGIC = 'img/magic_zombie';
+const PATH_TO_FOLDER_WITH_MAGIC = '../screens/images/magic_zombie';
 
 class MagicFactory {
     create(type) {

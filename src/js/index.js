@@ -1,5 +1,22 @@
 import {Spell} from "./spell";
 import {userResults} from "./gameLogic";
+import {SketchedObject} from "./sketchedObject";
+import {Hero} from "./hero";
+import {
+    redrawCharacter,
+    addCanvas,
+    isCanvasSupported,
+    getRandomInt,
+    drawMagicSequence,
+    animateObject,
+    makeExplosion,
+    executeInSequence,
+    subtractHealth,
+    revertPerson,
+    fillZombieLive,
+    fillHeroLive,
+    getCurrentHealth
+} from "./utils";
 
 document.getElementById('start').onclick = () => {
     const modal = document.getElementById("myModal");
@@ -30,23 +47,6 @@ document.getElementById('save').onclick = () => {
 };
 
 
-import {SketchedObject} from "./sketchedObject";
-import {
-    redrawCharacter,
-    addCanvas,
-    isCanvasSupported,
-    drawMagic,
-    getRandomInt,
-    drawMagicSequence,
-    animateObject,
-    makeExplosion,
-    executeInSequence,
-    subtractHealth,
-    revertPerson,
-    fillZombieLive,
-    fillHeroLive,
-    getCurrentHealth
-} from "./utils";
 import {MagicFactory} from "./magicFactory";
 import {ZombieFactory} from "./zombieFactory";
 
@@ -60,10 +60,6 @@ const id = 'gameCanvas';
 const gameField = 'gameField';
 const gameContainer = addCanvas(id, fieldWidth, fieldHeight, gameField);
 const ctx = gameContainer.getContext('2d');
-const personsPosition = {
-    'hero': [100, 460],
-    'zombie': [840, 460]
-};
 
 const zombieNameAdj = ['Ugly', 'Terrible', 'Anger', 'Mad', 'Unlucky'];
 const zombieNameType = ['Dead', 'Undead', 'Ork', 'Zombie', 'Torn to pieces'];
@@ -121,11 +117,21 @@ const attackType = {
 let zombieTimer;
 let heroTimer;
 
+
+const PATH_TO_HERO_IMG = 'img';
+const START_X_POSITION = 100;
+const START_Y_POSITION = 460;
+const HERO_HTML_PAGE_NAME_ID = 'heroName';
+const HERO_HTML_PAGE_HEALTH_LINE_ID = 'hero';
+const HERO_HTML_PAGE_HEALTH_AMOUNT_ID = 'heroHealth';
+const HERO_EYES_WIDTH = 8;
+const HERO_EYES_HEIGHT = 14;
+const HERO_EYES_SHIFT = 10;
 export const createHero = () => {
     const hero = ['leftArm', 'legs', 'torso', 'weapon', 'rightArm', 'head', 'hair',];
     const heroEyes = {'xPos': 59, 'yPos': 25};
-    const person = new SketchedObject(hero, 0, 0, 'img');
-    person.set(personsPosition['hero'][0], personsPosition['hero'][1]);
+    const person = new Hero(HERO_HTML_PAGE_NAME_ID, HERO_HTML_PAGE_HEALTH_LINE_ID, HERO_HTML_PAGE_HEALTH_AMOUNT_ID, HERO_EYES_WIDTH, HERO_EYES_HEIGHT, HERO_EYES_SHIFT);
+    person.setSketchedObject(hero, START_X_POSITION, START_Y_POSITION, PATH_TO_HERO_IMG);
     const position = [[40, 8], [0, 50], [0, 0], [65, -57], [-12, -3], [0, -80], [-28, -96]];
     const clearHeroArea = [71, 360, 165, 180];
     heroTimer = setInterval(redrawCharacter.bind(null, person, position, ctx, clearHeroArea, heroEyes), milliseconds / fps);
@@ -133,12 +139,12 @@ export const createHero = () => {
 
 
 export const createZombie = () => {
-    fillZombieLive(startHealth, zombieNameAdj, zombieNameType, zombieNameList);
-    const zombiePosition = [[-40, 8], [-25, 50], [0, 0], [-1, 2], [-78, -75], [-30, -80]];
-    const clearZombieArea = [750, 360, 150, 180];
+    const nameRange = 5;
     const zombiePerson = new ZombieFactory();
     const zombie = zombiePerson.create();
-    zombie.set(personsPosition['zombie'][0], personsPosition['zombie'][1]);
+    fillZombieLive(startHealth, zombieNameAdj, zombieNameType, zombieNameList, nameRange, zombie.getZombieName(), zombie.getZombieId(), zombie.getZombieHealth());
+    const zombiePosition = [[-40, 8], [-25, 50], [0, 0], [-1, 2], [-78, -75], [-30, -80]];
+    const clearZombieArea = [750, 360, 150, 180];
     const timer = setInterval(redrawCharacter.bind(null, zombie, zombiePosition, ctx, clearZombieArea), milliseconds / fps);
     return timer;
 };
@@ -152,19 +158,19 @@ const makeAttack = (ctx, action, spell) => {
     const paramsForAnimateObject = magic[attackAxis];
 
     animateObject(ctx, attack[0], paramsForAnimateObject['xPos'], paramsForAnimateObject['yPos'],
-        attack[0].object[0][0].width, attack[0].object[0][0].height, paramsForAnimateObject['clearArea'],
+        attack[0].getObject()[0][0].width + 100, attack[0].getObject()[0][0].height + 100, paramsForAnimateObject['clearArea'],
         attack[1], paramsForAnimateObject['increment'], paramsForAnimateObject['axis'], paramsForAnimateObject['stop'],
         paramsForAnimateObject['direction']);
 
     const health = document.getElementById(revertPerson(person));
     const width = health.style.width.replace('%', '');
-    setTimeout(subtractHealth.bind(null, health, Number(width), 10, revertPerson(person)), waitTime);
+    setTimeout(subtractHealth.bind(null, health, Number(width), 10, revertPerson(person), 'Health'), waitTime);
 };
 
 export const startGame = (name) => {
     clearInterval(heroTimer);
     clearInterval(zombieTimer);
-    fillHeroLive(name, startHealth);
+    fillHeroLive(name, startHealth, 'heroName', 'hero', 'heroHealth');
     createHero();
     zombieTimer = createZombie();
     setInterval(createNewZombie, 1000);

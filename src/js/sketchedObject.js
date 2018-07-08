@@ -1,24 +1,35 @@
 import {loadImage} from "./utils";
 
 class SketchedObject {
-    constructor(object, charX, charY, path) {
+    constructor(objectParticles, charX, charY, path) {
         this.index = 0;
-        this.objSize = object.length;
-        this.object = object.map((value, index) => {
+        this.objSize = objectParticles.length;
+        this.completeObject = objectParticles.map((value, index) => {
                 index++;
                 return loadImage(value, path);
             }
         );
         this.charX = charX;
         this.charY = charY;
-        this.breathAmt = 0;
-        this.breathDirection = 1;
     }
 
-    set(xPoint, yPoint) {
+    setPosition(xPoint, yPoint) {
         this.charX = xPoint;
         this.charY = yPoint;
     }
+
+    getObject() {
+        return this.completeObject;
+    }
+
+    getCharX() {
+        return this.charX;
+    }
+
+    getCharY() {
+        return this.charY;
+    }
+
 }
 
 
